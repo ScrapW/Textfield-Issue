@@ -27,6 +27,8 @@ jobs:
         with:
           gradle-version: current
           arguments: assembleRelease
+      - name: TEST
+        run: ls /usr/local/lib/android/sdk/build-tools/
       - uses: r0adkll/sign-android-release@v1
         id: sign_app
         with:
