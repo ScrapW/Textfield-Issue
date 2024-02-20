@@ -13,7 +13,8 @@ on:
         description: 'Test scenario tags'
 
 jobs:
-  build:
+  release:
+    name: "Build and release"
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -40,9 +41,19 @@ jobs:
         env:
           BUILD_TOOLS_VERSION: "34.0.0"
       - run: mv ${{steps.sign_app.outputs.signedReleaseFile}} Example_$GITHUB_REF_NAME.apk
-      - uses: ncipollo/release-action@v1
+
+      - name: Release
+        uses: softprops/action-gh-release@v0.1.15
         with:
-          artifacts: "*.apk"
-          token: ${{ github.token }}
-          generateReleaseNotes: true
+          draft: true
+          generate_release_notes: true
+          tag_name: ${{ steps.version.outputs.prop }}
+          files: |
+            Example_$GITHUB_REF_NAME.apk
+            
+      # - uses: ncipollo/release-action@v1
+      #   with:
+      #     artifacts: "*.apk"
+      #     token: ${{ github.token }}
+      #     generateReleaseNotes: true
 
